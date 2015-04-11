@@ -35,6 +35,8 @@ func New(secret []byte) *Signed {
 // Parse parses a string and returns a signed UUID
 // or an error if the format is invalid.
 // Note that the UUID is not being validated.
+// Usually this method can be used to deserialize
+// a signed UUID.
 func Parse(src string) (*Signed, error) {
 	x := strings.Split(src, ":")
 
@@ -65,6 +67,10 @@ func (s Signed) Signature() string {
 	return base64.StdEncoding.EncodeToString(s.sign)
 }
 
+// Returns a string version of the signed UUID
+// which can be used for serialization.
+// The generated string can be used
+// with the Parse method to reconstruct the signed UUID.
 func (s Signed) String() string {
 	return s.ID() + ":" + s.Signature()
 }
