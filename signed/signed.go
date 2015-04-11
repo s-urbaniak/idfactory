@@ -13,7 +13,7 @@ import (
 	"github.com/twinj/uuid"
 )
 
-// Signed is a container for an UUID and a signature
+// Signed is a container for an UUID and a signature.
 type Signed struct {
 	id   uuid.UUID
 	sign []byte
@@ -55,12 +55,12 @@ func Parse(src string) (*Signed, error) {
 	return &Signed{id, sign}, nil
 }
 
-// ID returns the ID part of a signed UUID
+// ID returns the ID part of a signed UUID.
 func (s Signed) ID() string {
 	return uuid.Formatter(s.id, uuid.CleanHyphen)
 }
 
-// Signature returns the signature of a signed UUID
+// Signature returns the signature of a signed UUID.
 func (s Signed) Signature() string {
 	return base64.StdEncoding.EncodeToString(s.sign)
 }
