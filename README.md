@@ -1,5 +1,7 @@
 # idfactory
 
+[![GoDoc](https://godoc.org/github.com/s-urbaniak/idfactory/signed?status.svg)](https://godoc.org/github.com/s-urbaniak/idfactory/signed)
+
 idfactory is a small http service for generating signed UUIDs.
 
 A common (anti)pattern is to provide endpoints
@@ -44,6 +46,7 @@ PUT /service/entity/633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1
 ```
 
 The target service validates the generated UUID in situ
+using the `github.com/s-urbaniak/idfactory/signed` package
 or can alternatively validate the transmitted key
 by invoking a GET request towards idfactory.
 
