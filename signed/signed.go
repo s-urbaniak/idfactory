@@ -76,6 +76,9 @@ func (s Signed) String() string {
 }
 
 // Validate validates the signed UUID against a given secret.
+// It returns true if the given signed UUID
+// matches the given secret
+// or false otherwise.
 func (s Signed) Validate(secret []byte) bool {
 	expected := newMac(s.id.Bytes(), secret)
 	return hmac.Equal(s.sign, expected)
