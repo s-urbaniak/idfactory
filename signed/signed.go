@@ -25,7 +25,7 @@ func newMac(src []byte, secret []byte) []byte {
 	return mac.Sum(nil)
 }
 
-// New creates a new UUID and signs it using the given secret
+// New creates a new UUID and signs it using the given secret.
 func New(secret []byte) *Signed {
 	id := uuid.NewV4()
 	sign := newMac(id.Bytes(), secret)
