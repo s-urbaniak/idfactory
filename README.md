@@ -2,7 +2,9 @@
 
 [![GoDoc](https://godoc.org/github.com/s-urbaniak/idfactory/signed?status.svg)](https://godoc.org/github.com/s-urbaniak/idfactory/signed)
 
-idfactory is a small http service for generating signed UUIDs.
+idfactory is a small http service
+for generating cryptographically signed UUIDs
+using a SHA256 based HMAC.
 
 A common (anti)pattern is to provide endpoints
 which accept POST requests to create new resources
