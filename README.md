@@ -86,7 +86,7 @@ $ curl -v -XPOST localhost:8080 | python -mjson.tool
 The server will respond with a JSON response having an `id` field
 containing the actual UUID and `signed` field containing the signed UUID.
 The server will also respond with a `Location` header
-containing a relative link for future validation.
+containing a link for future validation.
 Note that the returned `Location` header is relative
 (see https://tools.ietf.org/html/rfc7231#section-7.1.2).
 
