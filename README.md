@@ -21,11 +21,11 @@ which can be used as primary keys or unique IDs.
 A client first invokes this service
 to create a cryptographically signed unique ID:
 
-1. Request
+idfactory request
 ```
 POST /
 ```
-1. Response
+idfactory response
 ```
 HTTP/1.1 201 Created
 Content-Type: application/json
@@ -41,9 +41,14 @@ Location: /633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtA
 Then the client calls the actual target service
 with the pregenerated key:
 
-2. Request
+target service request
 ```
 PUT /service/entity/633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI=
+...
+```
+target service response
+```
+HTTP/1.1 200 Ok
 ...
 ```
 
@@ -100,7 +105,6 @@ To validate a given signed UUID send a GET request:
 ```
 $ curl -v localhost:8080/633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI=
 > GET /633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI= HTTP/1.1
-> Host: localhost:8080
 
 < HTTP/1.1 204 No Content
 ```
