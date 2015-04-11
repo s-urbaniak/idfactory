@@ -25,7 +25,7 @@ func newMac(src []byte, secret []byte) []byte {
 	return mac.Sum(nil)
 }
 
-// New creates a new signed UUID for a given secret
+// New creates a new UUID and signs it using the given secret
 func New(secret []byte) *Signed {
 	id := uuid.NewV4()
 	sign := newMac(id.Bytes(), secret)
@@ -33,7 +33,7 @@ func New(secret []byte) *Signed {
 }
 
 // Parse parses a string and returns a signed UUID
-// or an error if the string format is invalid.
+// or an error if the format is invalid.
 // Note that the UUID is not being validated.
 func Parse(src string) (*Signed, error) {
 	x := strings.Split(src, ":")
