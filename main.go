@@ -39,7 +39,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 func sign(w http.ResponseWriter, r *http.Request) {
 	s := signed.New(secret)
 	var response struct {
-		Id     string `json:"id"`
+		ID     string `json:"id"`
 		Signed string `json:"signed"`
 	}
 
@@ -65,7 +65,7 @@ func main() {
 	flag.StringVar(
 		&addr,
 		"addr",
-		":8080", 
+		":8080",
 		`HTTP service address (e.g., ':6060')`,
 	)
 
