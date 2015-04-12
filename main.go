@@ -43,7 +43,7 @@ func sign(w http.ResponseWriter, r *http.Request) {
 		Signed string `json:"signed"`
 	}
 
-	response.Id = s.ID()
+	response.ID = s.ID()
 	response.Signed = s.String()
 
 	j, err := json.Marshal(response)
