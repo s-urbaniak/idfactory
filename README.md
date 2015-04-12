@@ -1,6 +1,8 @@
 # idfactory
 
 [![GoDoc](https://godoc.org/github.com/s-urbaniak/idfactory/signed?status.svg)](https://godoc.org/github.com/s-urbaniak/idfactory/signed)
+[![Build Status](https://drone.io/github.com/s-urbaniak/idfactory/status.png)](https://drone.io/github.com/s-urbaniak/idfactory/latest)
+[![Coverage Status](https://coveralls.io/repos/s-urbaniak/idfactory/badge.svg?branch=master)](https://coveralls.io/r/s-urbaniak/idfactory?branch=master)
 
 idfactory is a small http service
 for generating cryptographically signed UUIDs
