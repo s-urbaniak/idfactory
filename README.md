@@ -121,3 +121,8 @@ $ curl -v localhost:8080/foo:bar
 
 < HTTP/1.1 412 Precondition Failed
 ```
+
+# Credits
+I'd like to thank Enrique Amodeo Rubio for his inspiration of this implementation.
+
+The logo of this project has been created using http://www.tinygraphs.com/
