@@ -1,4 +1,4 @@
-# idfactory
+# [![idfactory](http://tinygraphs.com/labs/isogrids/hexa16/idfactory?theme=bythepool&numcolors=4&size=220&fmt=svg)] idfactory
 
 [![GoDoc](https://godoc.org/github.com/s-urbaniak/idfactory/signed?status.svg)](https://godoc.org/github.com/s-urbaniak/idfactory/signed)
 [![Build Status](https://drone.io/github.com/s-urbaniak/idfactory/status.png)](https://drone.io/github.com/s-urbaniak/idfactory/latest)
