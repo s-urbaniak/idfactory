@@ -17,9 +17,8 @@ const delim = "~"
 
 // Signed is a container for an UUID and a signature.
 type Signed struct {
-	id    uuid.UUID
-	sign  []byte
-	enc   *base64.Encoding
+	id   uuid.UUID
+	sign []byte
 }
 
 func newMac(src []byte, secret []byte) []byte {
@@ -29,11 +28,12 @@ func newMac(src []byte, secret []byte) []byte {
 }
 
 // New creates a new UUID and signs it using the given secret.
-// The signature will be encoded using the given base64 encoding.
-func New(secret []byte, enc *base64.Encoding) *Signed {
+// The signature will be base64url encoded
+// with padding removed.
+func New(secret []byte) *Signed {
 	id := uuid.NewV4()
 	sign := newMac(id.Bytes(), secret)
-	return &Signed{id, sign, enc}
+	return &Signed{id, sign}
 }
 
 // Parse parses a string and returns a signed UUID
@@ -41,8 +41,9 @@ func New(secret []byte, enc *base64.Encoding) *Signed {
 // Note that the UUID is not being validated.
 // Usually this method can be used to deserialize
 // a signed UUID.
-// The signature will be decoded using the given base64 encoding.
-func Parse(src string, enc *base64.Encoding) (*Signed, error) {
+// The signature will be base64url decoded
+// with padding removed.
+func Parse(src string) (*Signed, error) {
 	x := strings.Split(src, delim)
 
 	if len(x) != 2 {
@@ -54,12 +55,14 @@ func Parse(src string, enc *base64.Encoding) (*Signed, error) {
 		return nil, err
 	}
 
-	sign, err := enc.DecodeString(x[1])
+	padded := x[1] + strings.Repeat("=", 4-len(x[1])%4)
+
+	sign, err := base64.URLEncoding.DecodeString(padded)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Signed{id, sign, enc}, nil
+	return &Signed{id, sign}, nil
 }
 
 // ID returns the ID part of a signed UUID.
@@ -69,7 +72,12 @@ func (s Signed) ID() string {
 
 // Signature returns the signature of a signed UUID.
 func (s Signed) Signature() string {
-	return s.enc.EncodeToString(s.sign)
+	encoded := base64.URLEncoding.EncodeToString(s.sign)
+
+	// manually removing padding,
+	// see https://github.com/golang/go/issues/4237
+	pad := 4 - len(encoded)%4
+	return encoded[:pad]
 }
 
 // Returns a string version of the signed UUID

@@ -2,7 +2,6 @@
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -23,7 +22,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	actual, err := signed.Parse(s, base64.URLEncoding)
+	actual, err := signed.Parse(s)
 	if err != nil {
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
@@ -38,7 +37,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 }
 
 func sign(w http.ResponseWriter, r *http.Request) {
-	s := signed.New(secret, base64.URLEncoding)
+	s := signed.New(secret)
 	var response struct {
 		ID     string `json:"id"`
 		Signed string `json:"signed"`

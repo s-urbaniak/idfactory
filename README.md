@@ -31,11 +31,11 @@ idfactory response
 ```
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0=
+Location: /5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0
 
 {
     "id": "5d7965f2-02b3-4547-ba12-efc9141cc17d",
-    "signed": "5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0="
+    "signed": "5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0"
 }
 ```
 
@@ -44,7 +44,7 @@ with the pregenerated key:
 
 target service request
 ```
-PUT /service/entity/5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0=
+PUT /service/entity/5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0
 ...
 ```
 target service response
@@ -90,8 +90,8 @@ Note that the returned `Location` header is relative
 To validate a given signed UUID send a GET request:
 
 ```
-$ curl -v localhost:8080/5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0=
-> GET /5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0= HTTP/1.1
+$ curl -v localhost:8080/5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0
+> GET /5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0 HTTP/1.1
 
 < HTTP/1.1 204 No Content
 ```
