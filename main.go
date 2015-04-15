@@ -2,6 +2,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -22,7 +23,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	actual, err := signed.Parse(s)
+	actual, err := signed.Parse(s, base64.URLEncoding)
 	if err != nil {
 		w.WriteHeader(http.StatusPreconditionFailed)
 		return
@@ -37,7 +38,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 }
 
 func sign(w http.ResponseWriter, r *http.Request) {
-	s := signed.New(secret)
+	s := signed.New(secret, base64.URLEncoding)
 	var response struct {
 		ID     string `json:"id"`
 		Signed string `json:"signed"`
@@ -87,7 +88,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/{signed:[a-zA-Z0-9-=:/+]+}", validate).
+	r.HandleFunc("/{signed:[a-zA-Z0-9-~=_]+}", validate).
 		Methods("GET")
 
 	r.HandleFunc("/", sign).

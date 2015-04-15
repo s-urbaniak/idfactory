@@ -1,6 +1,7 @@
 package signed
 
 import (
+	"encoding/base64"
 	"testing"
 )
 
@@ -8,30 +9,30 @@ var secret = []byte("something very secret")
 var wrongSecret = []byte("wrong secret")
 
 func TestValidation(t *testing.T) {
-	s := New(secret)
+	s := New(secret, base64.URLEncoding)
 
 	if !s.Validate(secret) {
-		t.Error("signed uuid must validate itself successfully")
+		t.Fatal("signed uuid must validate itself successfully")
 	}
 
 	if s.Validate(wrongSecret) {
-		t.Error("signed uuid must not validate with a wrong secret")
+		t.Fatal("signed uuid must not validate with a wrong secret")
 	}
 }
 
 func assertFailedParser(src string, t *testing.T) {
-	_, err := Parse("")
+	_, err := Parse("", base64.URLEncoding)
 
 	if err == nil {
-		t.Error("an empty string must fail")
+		t.Fatal("an empty string must fail")
 	}
 }
 
 func assertParser(src string, t *testing.T) *Signed {
-	s, err := Parse(src)
+	s, err := Parse(src, base64.URLEncoding)
 
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	return s
@@ -40,16 +41,16 @@ func assertParser(src string, t *testing.T) *Signed {
 func TestParserFailures(t *testing.T) {
 	assertFailedParser("", t)
 	assertFailedParser("abc", t)
-	assertFailedParser("abc:abc", t)
-	assertFailedParser(":", t)
-	assertFailedParser("abc:", t)
-	assertFailedParser(":abc", t)
+	assertFailedParser("abc~abc", t)
+	assertFailedParser("~", t)
+	assertFailedParser("abc~", t)
+	assertFailedParser("~abc", t)
 }
 
 func TestParser(t *testing.T) {
-	s := assertParser("3be0d941-0996-49bd-8de1-82a7bdf6282a:E7uy78y1pia2CYmsza/w6OIRVsd5yYgjuykDDcx4RzQ=", t)
+	s := assertParser("6ac34e8f-8780-4509-83f8-e15a345632e7~AjLn6tiDcBNgx8zMR0xH0Q3rjZxdBuv7Gpdz4MJN7rc=", t)
 
 	if !s.Validate(secret) {
-		t.Error("signed uuid must validate itself successfully")
+		t.Fatal("signed uuid must validate itself successfully")
 	}
 }

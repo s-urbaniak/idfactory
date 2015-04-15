@@ -31,13 +31,12 @@ idfactory response
 ```
 HTTP/1.1 201 Created
 Content-Type: application/json
-Location: /633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI=
+Location: /5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0=
 
 {
-    "id": "633b5398-7233-4f53-975e-65e0ac39dbe6",
-    "signed": "633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI="
+    "id": "5d7965f2-02b3-4547-ba12-efc9141cc17d",
+    "signed": "5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0="
 }
-
 ```
 
 Then the client calls the actual target service
@@ -45,7 +44,7 @@ with the pregenerated key:
 
 target service request
 ```
-PUT /service/entity/633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI=
+PUT /service/entity/5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0=
 ...
 ```
 target service response
@@ -79,21 +78,7 @@ All generated UUIDs will be signed using the given secret.
 
 ### Client
 
-To create a signed UUID, send an empty POST request:
-
-```
-$ curl -v -XPOST localhost:8080 | python -mjson.tool
-> POST / HTTP/1.1
-
-< HTTP/1.1 201 Created
-< Content-Type: application/json
-< Location: /633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI=
-
-{
-    "id": "633b5398-7233-4f53-975e-65e0ac39dbe6",
-    "signed": "633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI="
-}
-```
+To create a signed UUID, send an empty POST request as described above.
 
 The server will respond with a JSON response having an `id` field
 containing the actual UUID and `signed` field containing the signed UUID.
@@ -105,8 +90,8 @@ Note that the returned `Location` header is relative
 To validate a given signed UUID send a GET request:
 
 ```
-$ curl -v localhost:8080/633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI=
-> GET /633b5398-7233-4f53-975e-65e0ac39dbe6:YezlAZEYbbrfHSRHSUy7Vy1N/JEEMQtATzsQRCxnkSI= HTTP/1.1
+$ curl -v localhost:8080/5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0=
+> GET /5d7965f2-02b3-4547-ba12-efc9141cc17d~bwzSukolBruIoQ5T80k5X7pYrdtNSqRbUU359PX8-F0= HTTP/1.1
 
 < HTTP/1.1 204 No Content
 ```
@@ -116,7 +101,7 @@ or with a status code 412 with an empty body
 if the signed UUID could not be validated:
 
 ```
-$ curl -v localhost:8080/foo:bar
+$ curl -v localhost:8080/foo~bar
 > GET /foo:bar HTTP/1.1
 
 < HTTP/1.1 412 Precondition Failed

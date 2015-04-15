@@ -13,10 +13,13 @@ import (
 	"github.com/twinj/uuid"
 )
 
+const delim = "~"
+
 // Signed is a container for an UUID and a signature.
 type Signed struct {
-	id   uuid.UUID
-	sign []byte
+	id    uuid.UUID
+	sign  []byte
+	enc   *base64.Encoding
 }
 
 func newMac(src []byte, secret []byte) []byte {
@@ -26,10 +29,11 @@ func newMac(src []byte, secret []byte) []byte {
 }
 
 // New creates a new UUID and signs it using the given secret.
-func New(secret []byte) *Signed {
+// The signature will be encoded using the given base64 encoding.
+func New(secret []byte, enc *base64.Encoding) *Signed {
 	id := uuid.NewV4()
 	sign := newMac(id.Bytes(), secret)
-	return &Signed{id, sign}
+	return &Signed{id, sign, enc}
 }
 
 // Parse parses a string and returns a signed UUID
@@ -37,8 +41,9 @@ func New(secret []byte) *Signed {
 // Note that the UUID is not being validated.
 // Usually this method can be used to deserialize
 // a signed UUID.
-func Parse(src string) (*Signed, error) {
-	x := strings.Split(src, ":")
+// The signature will be decoded using the given base64 encoding.
+func Parse(src string, enc *base64.Encoding) (*Signed, error) {
+	x := strings.Split(src, delim)
 
 	if len(x) != 2 {
 		return nil, errors.New("invalid format")
@@ -49,12 +54,12 @@ func Parse(src string) (*Signed, error) {
 		return nil, err
 	}
 
-	sign, err := base64.StdEncoding.DecodeString(x[1])
+	sign, err := enc.DecodeString(x[1])
 	if err != nil {
 		return nil, err
 	}
 
-	return &Signed{id, sign}, nil
+	return &Signed{id, sign, enc}, nil
 }
 
 // ID returns the ID part of a signed UUID.
@@ -64,7 +69,7 @@ func (s Signed) ID() string {
 
 // Signature returns the signature of a signed UUID.
 func (s Signed) Signature() string {
-	return base64.StdEncoding.EncodeToString(s.sign)
+	return s.enc.EncodeToString(s.sign)
 }
 
 // Returns a string version of the signed UUID
@@ -72,7 +77,7 @@ func (s Signed) Signature() string {
 // The generated string can be used
 // with the Parse method to reconstruct the signed UUID.
 func (s Signed) String() string {
-	return s.ID() + ":" + s.Signature()
+	return s.ID() + delim + s.Signature()
 }
 
 // Validate validates the signed UUID against a given secret.
