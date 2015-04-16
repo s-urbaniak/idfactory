@@ -55,7 +55,10 @@ func Parse(src string) (*Signed, error) {
 		return nil, err
 	}
 
-	padded := x[1] + strings.Repeat("=", 4-len(x[1])%4)
+	padded := x[1]
+	if l := len(padded) % 4; l > 0 {
+		padded += strings.Repeat("=", 4-l)
+	}
 
 	sign, err := base64.URLEncoding.DecodeString(padded)
 	if err != nil {
@@ -72,12 +75,9 @@ func (s Signed) ID() string {
 
 // Signature returns the signature of a signed UUID.
 func (s Signed) Signature() string {
-	encoded := base64.URLEncoding.EncodeToString(s.sign)
-
 	// manually removing padding,
 	// see https://github.com/golang/go/issues/4237
-	pad := 4 - len(encoded)%4
-	return encoded[:pad]
+	return strings.TrimRight(base64.URLEncoding.EncodeToString(s.sign), "=")
 }
 
 // Returns a string version of the signed UUID
