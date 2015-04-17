@@ -15,8 +15,14 @@ import (
 
 const delim = "~"
 
+type Signed interface {
+	ID() string
+	Signature() string
+	Validate(secret []byte) bool
+}
+
 // Signed is a container for an UUID and a signature.
-type Signed struct {
+type signed struct {
 	id   uuid.UUID
 	sign []byte
 }
@@ -30,10 +36,10 @@ func newMac(src []byte, secret []byte) []byte {
 // New creates a new UUID and signs it using the given secret.
 // The signature will be base64url encoded
 // with padding removed.
-func New(secret []byte) *Signed {
+func New(secret []byte) *signed {
 	id := uuid.NewV4()
 	sign := newMac(id.Bytes(), secret)
-	return &Signed{id, sign}
+	return &signed{id, sign}
 }
 
 // Parse parses a string and returns a signed UUID
@@ -43,7 +49,7 @@ func New(secret []byte) *Signed {
 // a signed UUID.
 // The signature will be base64url decoded
 // with padding removed.
-func Parse(src string) (*Signed, error) {
+func Parse(src string) (*signed, error) {
 	x := strings.Split(src, delim)
 
 	if len(x) != 2 {
@@ -65,16 +71,16 @@ func Parse(src string) (*Signed, error) {
 		return nil, err
 	}
 
-	return &Signed{id, sign}, nil
+	return &signed{id, sign}, nil
 }
 
 // ID returns the ID part of a signed UUID.
-func (s Signed) ID() string {
+func (s signed) ID() string {
 	return uuid.Formatter(s.id, uuid.CleanHyphen)
 }
 
 // Signature returns the signature of a signed UUID.
-func (s Signed) Signature() string {
+func (s signed) Signature() string {
 	// manually removing padding,
 	// see https://github.com/golang/go/issues/4237
 	return strings.TrimRight(base64.URLEncoding.EncodeToString(s.sign), "=")
@@ -84,7 +90,7 @@ func (s Signed) Signature() string {
 // which can be used for serialization.
 // The generated string can be used
 // with the Parse method to reconstruct the signed UUID.
-func (s Signed) String() string {
+func (s signed) String() string {
 	return s.ID() + delim + s.Signature()
 }
 
@@ -92,7 +98,7 @@ func (s Signed) String() string {
 // It returns true if the given signed UUID
 // matches the given secret
 // or false otherwise.
-func (s Signed) Validate(secret []byte) bool {
+func (s signed) Validate(secret []byte) bool {
 	expected := newMac(s.id.Bytes(), secret)
 	return hmac.Equal(s.sign, expected)
 }

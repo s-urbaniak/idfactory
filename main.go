@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"reflect"
 
 	"github.com/gorilla/mux"
 	"github.com/s-urbaniak/idfactory/signed"
@@ -38,6 +39,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 
 func sign(w http.ResponseWriter, r *http.Request) {
 	s := signed.New(secret)
+	log.Println(reflect.TypeOf(s))
 	var response struct {
 		ID     string `json:"id"`
 		Signed string `json:"signed"`
@@ -87,7 +89,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/{signed:[a-zA-Z0-9-~=_]+}", validate).
+	r.HandleFunc("/{signed:[a-zA-Z0-9-~_]+}", validate).
 		Methods("GET")
 
 	r.HandleFunc("/", sign).

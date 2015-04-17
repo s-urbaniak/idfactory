@@ -25,7 +25,7 @@ func assertFailedParser(src string, t *testing.T) {
 	}
 }
 
-func assertParser(src string, t *testing.T) *Signed {
+func assertParser(src string, t *testing.T) Signed {
 	s, err := Parse(src)
 
 	if err != nil {
