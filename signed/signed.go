@@ -56,7 +56,7 @@ func Parse(src string) (*signed, error) {
 		return nil, errors.New("invalid format")
 	}
 
-	id, err := uuid.ParseUUID(x[0])
+	id, err := uuid.Parse(x[0])
 	if err != nil {
 		return nil, err
 	}
